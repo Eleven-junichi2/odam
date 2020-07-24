@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+from pathlib import Path
 
 
 def main():
@@ -18,6 +19,14 @@ def main():
         event, values = window.read()
         if event == sg.WIN_CLOSED:
             break
+        dir_path = Path(values[0])
+        file_path_list = list(
+            [path_ for path_ in dir_path.iterdir() if path_.is_file()])
+        print(file_path_list)
+        for number, file_path in enumerate(file_path_list):
+            print(file_path)
+            file_path.rename(file_path.parent.joinpath(
+                f"{number} {file_path.name}"))
         print('You entered ', values[0])
         print('You entered ', values[1])
         print('You entered ', values[2])
