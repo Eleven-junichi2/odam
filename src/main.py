@@ -20,7 +20,8 @@ def main():
     layout = [
         [sg.Text(
             "Select the directory contains files you want to auto-number:")],
-        [sg.Input(key="path_to_auto-number"), sg.FolderBrowse()],
+        [sg.Input(key="path_to_auto-number", readonly=True),
+         sg.FolderBrowse()],
         [sg.Text("Style of number:")],
         [sg.Radio("1, 2, 3...", "prefix_style",
                   key="number_prefix", default=True),
@@ -29,14 +30,18 @@ def main():
         [sg.Checkbox(
             "Separate prefix and filename with space",
             key="separate_with_space", default=True)],
-        [sg.Button("Ok")]]
+        [sg.Button("Ok")]
+    ]
     window = sg.Window("Odam", layout)
     while True:
         event, values = window.read()
         if event == sg.WIN_CLOSED:
             break
-        print(values)
-        dir_path = Path(values["path_to_auto-number"])
+        if values["path_to_auto-number"] == "":
+            sg.popup_ok("Please select the directory.")
+            continue
+        else:
+            dir_path = Path(values["path_to_auto-number"])
         use_number_as_prefix = values["number_prefix"]
         use_alphabet_as_prefix = values["alphabet_prefix"]
         use_space_as_separetor = values["separate_with_space"]
@@ -50,7 +55,13 @@ def main():
             separater = " "
         else:
             separater = ""
-        rename_files_with_auto_num(dir_path, prefix_style, separater)
+        try:
+            rename_files_with_auto_num(dir_path, prefix_style, separater)
+        except Exception as e:
+            sg.popup_error(e)
+            raise(e)
+        else:
+            sg.popup_ok("The files was renamed.")
     window.close()
 
 
