@@ -1,5 +1,17 @@
 import PySimpleGUI as sg
 from pathlib import Path
+import sys
+import os
+
+script_dir = Path(__file__).absolute().parent
+assets_dir_name = "assets"
+assets_dir = script_dir / assets_dir_name
+
+def asset_path(asset_file_name):
+    if hasattr(sys, '_MEIPASS'):
+        print(f"meipass: {sys._MEIPASS}")
+        return os.path.join(sys._MEIPASS, asset_file_name)
+    return assets_dir / asset_file_name
 
 
 def rename_files_with_auto_num(
@@ -32,7 +44,8 @@ def main():
             key="separate_with_space", default=True)],
         [sg.Button("Ok")]
     ]
-    window = sg.Window("Odam", layout)
+    icon_path = asset_path("icon.ico")
+    window = sg.Window("Odam", layout, icon=icon_path)
     while True:
         event, values = window.read()
         if event == sg.WIN_CLOSED:

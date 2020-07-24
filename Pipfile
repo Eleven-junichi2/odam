@@ -8,6 +8,7 @@ flake8 = "*"
 autopep8 = "*"
 pytest = "*"
 pyinstaller = "*"
+pysimplegui-exemaker = "*"
 
 [packages]
 pysimplegui = "*"
