@@ -3,6 +3,8 @@ from pathlib import Path
 
 script_dir = Path(__file__).absolute().parent
 dir_for_test_path = script_dir / "dir_for_test_file_io"
+if not dir_for_test_path.exists():
+    dir_for_test_path.mkdir()
 
 
 def test_rename_files_with_auto_num():
