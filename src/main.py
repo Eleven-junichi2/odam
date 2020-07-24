@@ -61,7 +61,7 @@ def main():
             sg.popup_error(e)
             raise(e)
         else:
-            sg.popup_ok("The files was renamed.")
+            sg.popup_ok("The files was successfully renamed.")
     window.close()
 
 
