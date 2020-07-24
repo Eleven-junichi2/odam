@@ -2,6 +2,19 @@ import PySimpleGUI as sg
 from pathlib import Path
 
 
+def rename_files_with_auto_num(
+        dir_path: Path, prefix_style="number", separater=""):
+    file_path_list = list(
+        [path_ for path_ in dir_path.iterdir() if path_.is_file()])
+    for number, file_path in enumerate(file_path_list):
+        if prefix_style == "number":
+            prefix = number
+        else:
+            raise ValueError("That prefix style is unavaliable.")
+        file_path.rename(file_path.parent.joinpath(
+            f"{prefix}{separater}{file_path.name}"))
+
+
 def main():
     sg.theme("DarkBlack1")
     layout = [
@@ -24,23 +37,20 @@ def main():
             break
         print(values)
         dir_path = Path(values["path_to_auto-number"])
-        # use_number_as_prefix = values["number_prefix"]
-        # use_alphabet_as_prefix = values["alphabet_prefix"]
+        use_number_as_prefix = values["number_prefix"]
+        use_alphabet_as_prefix = values["alphabet_prefix"]
         use_space_as_separetor = values["separate_with_space"]
-        # if use_number_as_prefix:
-        # prefix_style = "number"
+        if use_number_as_prefix:
+            prefix_style = "number"
+        elif use_alphabet_as_prefix:
+            prefix_style = "alphabet"
+        else:
+            raise ValueError("Please select style of number")
         if use_space_as_separetor:
             separater = " "
         else:
             separater = ""
-
-        file_path_list = list(
-            [path_ for path_ in dir_path.iterdir() if path_.is_file()])
-        print(file_path_list)
-        for number, file_path in enumerate(file_path_list):
-            prefix = number
-            file_path.rename(file_path.parent.joinpath(
-                f"{prefix}{separater}{file_path.name}"))
+        rename_files_with_auto_num(dir_path, prefix_style, separater)
     window.close()
 
 
